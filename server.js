@@ -10,6 +10,16 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
+app.post("/", async (req, res) => {
+  try {
+    res.send("hello");
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal server error");
+  }
+});
+
+
 // Applying CORS options to the specific route
 app.use('/souls', cors(corsOptions));
 
