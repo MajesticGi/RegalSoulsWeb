@@ -1,0 +1,28 @@
+services:
+  - name: gericka
+    type: postgres
+    plan: postgresql-dev
+    config:
+      version: "15"
+      hostname: localhost
+      port: 5432
+      database: gericka
+      username: playabook
+      password: 8896
+    env:
+      DATABASE_URL: postgres://playabook:8896@localhost:5432/gericka
+
+  - name: gericka
+    type: node
+    source:
+      type: github
+      branch: master
+    buildCommand: "npm install && npm build"
+    startCommand: "npm start"
+    env:
+      DATABASE_URL: postgres://playabook:8896@localhost:5432/gericka
+
+routes:
+  - path: /gericka
+    methods: ["POST"]
+    service: gericka-db
