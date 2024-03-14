@@ -1,49 +1,52 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const pool = require("./db"); // because this is whats being exported form module.exports on the otyher page
+const button = document.getElementById("btn");
+const first = document.getElementById("first");
+const last = document.getElementById("last");
+const phone = document.getElementById("phone");
+const target = document.getElementById("target");
+const birthdate = document.getElementById("birthdate");
+const email = document.getElementById("email");
+const money = document.getElementById("money");
+const other = document.getElementById("other");
+const love = document.getElementById("love");
 
 
 
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', 'https://regalsouls.netlify.app');
-//     next();
-// });
-//middleware is needed or we will get an error
-app.use(cors());
-app.use(express.json());
+button.addEventListener("click", async () => {
 
-// what is set Heahder and why access-allow origin
-
-
-
-//submitting the data
-app.post("/souls", async (req, res) => {
+    //we might have to switch the true and false of the radios ghere when you dlick then process to database
     try {
-        const { first, last, birthdate, phone, target, email, money, love, other } = req.body // we decontructed the body object in the cleint
-        const newInfo = await pool.query(
-            "INSERT INTO readings(id,first,last,email,phone,birthdate,target,money,love,other) VALUES(nextval('readings_id_seq'),$1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
-            [first, last, email, phone, birthdate, target, money, love, other]
-        );
 
-        // const id = newInfo.rows[0].id // extract id from retirned row
+        const body = {
+            first: first.value,
+            last: last.value,
+            phone: phone.value,
+            target: target.value,
+            email: email.value,
+            birthdate: birthdate.value,
+            money: money.checked,
+            other: other.checked,
+            love: love.checked
+        }
 
-        // const radio = await pool.query(
-        //     "INSERT INTO readings(money,love,other) VALUES($1,$2,$3) RETURNING *",
-        //     [money,love,other]
-        // )
-        res.json(
-            newInfo.rows
-            )//this is what we sending back to the browser
+        const response = await fetch("http://localhost:5000/souls",
+            {
+                method: "POST",
+                headers: { "Content-type": "application/json" }, // this is to tell the browseres that its going to ressive json dats
+                body: JSON.stringify(body)
+            })
+        //serial primal key
+        first.value = "";
+            last.value = "";
+            birthdate.value = "";
+            phone.value = "";
+            target.value = "";
+            email.value = "";
+
+        alert("Your booking was sucessful we will get back with you shorly")
 
     } catch (error) {
-        console.log(error.message)
-        console.log("no")
+        console.log(error)
     }
 })
 
-
-
-app.listen(5000, () => {
-    console.log("server works")
-})
+//check datbase and remove every thing but money like before
