@@ -10,7 +10,7 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
-app.post("/", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     res.send("hello");
   } catch (error) {
