@@ -14,7 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 // what is set Heahder and why access-allow origin
-
+app.post("/",async()=>{
+    console.log("hello")
+})
 
 
 //submitting the data
